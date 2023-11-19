@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 """
 Spyder Editor
-
-This is a stochastic-spatial model of intraspecific competition
 """
-#import division for division?
+
+#import division for division
 from __future__ import division 
 #import maptlotlib for plotting
 import matplotlib.pyplot as plt
