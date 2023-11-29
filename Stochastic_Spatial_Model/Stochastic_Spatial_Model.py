@@ -24,9 +24,9 @@ plt.rcParams["font.serif"] = "Times New Roman"
 np.random.seed(seed=1769)
 
 #names for folders
-experiment_title = 'm_biased_dispersal_New'
-folder = 'm_images_biased_dispersal_New'
-graph_folder = 'm_graphs_biased_dispersal_New'
+experiment_title = 'mixed_biased_dispersal'
+folder = 'mixed_images_biased_dispersal'
+graph_folder = 'mixed_graphs_biased_dispersal'
 
 #make folder for saving output
 if os.path.isdir(folder)==False:
@@ -70,7 +70,7 @@ ranger=4
 #init experiment 
 x = np.random.choice([0,1,2,3],[L,L], p=[0.7,.1,0.1,0.1])
 
-#function
+#function for boundary conditions 
 def pbc_reset(old_pos,L):
     new_pos = old_pos
     for i in range(2):
@@ -129,12 +129,12 @@ for i in range(num_iter):
         print('pa14 dispersal event over')
         A=np.array([[0,0,0,0],[0.036,(0.6078-1)/10,(0.6078-1)/10,(0.6078-1)/10],[0.042,(0.7198-1)/10,(0.7198-1)/10,(0.7198-1)/10],[0.109,(0.1942-1)/10,(0.1942-1)/10,(0.1942-1)/10]])
     
-    # x =np.take(x,np.random.permutation(x.shape[0]),axis=0,out=x)
+    #mix every ten timesteps 
     if i%10==0:
         rng = np.random.default_rng()
         x = rng.permuted(x)
-        #display images
-
+    
+    #display images
     if i%10==0 or i==799 or i==0:
         frame_counter+=1
         plt.figure()
@@ -166,8 +166,6 @@ volume_data['Time']=time_array
 volume_dataframe = pd.DataFrame(data=volume_data)
 volume_dataframe.to_csv(experiment_title+'.csv', index=False)
 #%%
-# volume_dataframe = pd.read_csv(experiment_title+'.csv')
-
 # show snapshot of the final figure
 plt.figure()
 plt.axis('off')
