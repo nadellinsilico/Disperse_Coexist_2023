@@ -1,65 +1,54 @@
-CPA = [1 1 0];
-CEF = [0 1 1];
-CEC = [1 0 1];
+function xxx=mixed_pd_Pa_RA(v)
+
+% function for finding pa relative abundance. No longer included in paper,
+% but was present in the first version posted on bioarxiv
 
 % PA thresholds for turning dispersal on/off
-pa_thresh_up=0.9*0.71981117;
-pa_thresh_down=0.1*0.71981117;
+pa_thresh_up=v(1);
+% disp(pa_thresh_up)
+pa_thresh_down=v(2);
 
-%run for a reasonably long time
-T=10000;
-ttt=[];
-xxx=[];
-p=[0 pa_thresh_up];
+T=4000;
+xxx=[NaN];
+p=[0 pa_thresh_up v];
 t0=0;
-x0=[0.02 0.01 0.01];
+x0=[0.01 0.01 0.01];
 
 while t0<T
-
+    
     opts = odeset('Events',@(t,x) events(t,x,p));
     [tt,xx]=ode15s(@(t,x) FF(t,x,p),[t0 T],x0,opts);
     t0=tt(end);
     x0=xx(end,:);
-    ttt=[ttt; tt];
-    xxx=[xxx; xx];
     
-    if p==[0 pa_thresh_up]
-        p=[1 pa_thresh_down];
-    elseif p==[1 pa_thresh_down]
-        p=[0 pa_thresh_up];
+    if p==[0 pa_thresh_up v]
+        p=[1 pa_thresh_down v];
+        
+    elseif p==[1 pa_thresh_down v]
+        p=[0 pa_thresh_up v];        
+    xxx=xx(end,1)/(xx(end,1)+xx(end,2)+xx(end,3));    
+        
+    
     end
     
 end
 
-hold on
-plot(ttt,xxx(:,1),'Color',CPA,'LineWidth',3)
-plot(ttt,xxx(:,2),'Color',CEF,'LineWidth',3)
-plot(ttt,xxx(:,3),'Color',CEC,'LineWidth',3)
-xlabel('Time (doublings)','FontSize',20)
-ylabel('Fraction of population','FontSize',20)
-legend('PA','EF','EC','FontSize',15)
-axis([0 tt(end) 0 1.1])
-set(gca,'FontSize',15)
-ch1 = xxx(:,1,:);
-ch2 = xxx(:,2,:);
-ch3 = xxx(:,3,:);
-
 function dx=FF(t,x,p)
 
 % growth of each species
-gpa=0.042;
-gef=0.109;
-gec=0.036;
+gpa=p(5);
+gef=p(6);
+gec=p(7);
 
 % carrying capacity for each species
-Kpa=0.71981117;
-Kef=0.194193739;
-Kec=0.607803022;
+Kpa=p(8);
+Kef=p(9);
+Kec=p(10);
 
 % dispersal of each species
-spa=2;
-sef=2;
-sec=2;
+spa=p(11);
+sef=p(12);
+sec=p(13);
 s=p(1); % triggers dispersal
 
 pa=x(1);
@@ -80,4 +69,4 @@ function [position,isterminal,direction] = events(t,x,p)
   direction = 0;   % The zero can be approached from either direction
 end
 
-
+end
