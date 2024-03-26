@@ -1,3 +1,4 @@
+
 N=51;
 Tend = 1000;
 D = 0.000025;
@@ -16,8 +17,8 @@ k=dt/(2*dx^2);
 x = [0:dx:1]; y = [0:dx:1];
 
 pa=0.2*(rand(N,N)<0.1);
-ef=0.2*(rand(N,N)<0.1); %zeros(N,N)
-ec=0.2*(rand(N,N)<0.1); %zeros(N,N)
+ef=0.2*(rand(N,N)<0.1);
+ec=0.2*(rand(N,N)<0.1); 
 
 pa = reshape(pa,N^2,1);
 ef = reshape(ef,N^2,1);
@@ -99,8 +100,6 @@ return
 end
 
 function [dx ss]=FF(t,x,s)
-
-% populations rescaled by highest carrying capacity (Kpa=1)
 
 % growth of each species
 gpa=0.042;
