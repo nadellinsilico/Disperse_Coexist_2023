@@ -80,7 +80,7 @@ L=50
 N=L**2
 
 x1=0.05
-num_iter=100
+num_iter=20000
 dt=1
 tmax=dt*num_iter
 moves = np.array([[-1,0],[1,0],[0,-1],[0,1]])
