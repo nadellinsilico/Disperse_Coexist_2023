@@ -15,10 +15,11 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from scipy import stats
 import ternary
-import scipy.io
 import seaborn as sns
 import matplotlib as mpl
 from ast import literal_eval
+from palettable.colorbrewer.sequential import Greys_6_r
+from palettable.colorbrewer.sequential import Inferno_20
 
 #%%
 """
@@ -436,9 +437,35 @@ plt.show()
 """
 Figure 2H
 
-See MATLAB scripts.
+Use the stochastic spatial model make_heatmap script to generate data prior to running this code. 
 """
+ratio_list = list(np.flip(np.arange(0,1.1,.1)))
+growth_list = list(np.arange(.03,.06003,.003))
+experiment_title = 'phase_diagram'
 
+result = []
+
+for ratio in ratio_list:
+    ratio_cake = []
+    for growth in growth_list:
+        to_average = []        
+        for rep in np.arange(0,20):
+            df = pd.read_excel('Stochastic_Spatial_Model/phase_diagram/'+experiment_title+'_p3_'+str(ratio)+'_'+str(growth)+'_'+str(rep)+'_20000.xlsx')
+            if df.Species1[len(df)-1] != 0 and df.Species2[len(df)-1] != 0 and df.Species3[len(df)-1] != 0:
+                to_average.append(1)
+            else:
+                to_average.append(0)
+        ratio_cake.append(np.mean(to_average))
+    result.append(ratio_cake)
+
+ax = sns.heatmap(result, square=True, cmap=Greys_6_r.mpl_colormap)
+for _, spine in ax.spines.items():
+    spine.set_visible(True)
+        
+# plt.savefig('Fig2H.svg', dpi=300, facecolor='w', edgecolor='b',
+#         orientation='portrait', format='svg',
+#         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
+plt.show
 #%%
 """
 Figure 3B 
@@ -854,11 +881,11 @@ plt.show()
 
 #%%
 """
-SI Figure2C
+SI Figure 2C
 
-Stats for Fig1C
+Stats for SI Figure 2C
 
-substract sample distrubtions, see if confidence interval is less than 0
+Same data as Figure 1C
 """
 
 ecoli_co = [([327.31799833195225, 74739.97154885676,  30178.86602171233, 2272,10348]), 
@@ -893,42 +920,17 @@ pa = [([362289.6023790988, 550.316753017643, 118188.07173208568]),
           ([337295.43424540985, 398535.4141324807, 242220.39670517063, 23597.645090594877, 164344.37751006486]),
           ([385489.7102260408, 439545.5021568775, 227691.2968063428, 5.02094258e+05, 452658.56209157, 520242.070775, 429652.64031865])]
 
-y = []
-y_co = []
-x = []
 for i in np.arange(0,len(pa)):
-    y.append(np.mean(pa_co[i])-np.mean(pa[i]))
-    y_co.append(1.95*np.sqrt(np.var(pa_co[i])+np.var(pa[i]))/np.min([len(pa[i]), len(pa_co[i])]))
-    x.append(i+1)
+    print(stats.mannwhitneyu(pa[i], pa_co[i]))
+print('end pa')
 
-y1 = []
-y1_co = []
-x = []
 for i in np.arange(0,len(pa)):
-    y1.append(np.mean(ent_co[i])-np.mean(ent[i]))
-    y1_co.append(1.95*np.sqrt(np.var(ent_co[i])+np.var(ent[i]))/np.min([len(ent[i]), len(ent_co[i])]))
-    x.append(i+1)
+    print(stats.mannwhitneyu(ecoli[i], ecoli_co[i]))
+print('end ec')
     
-
-y2 = []
-y2_co = []
-x = []
 for i in np.arange(0,len(pa)):
-    y2.append(np.mean(ecoli_co[i])-np.mean(ecoli[i]))
-    y2_co.append(1.95*np.sqrt(np.var(ecoli_co[i])+np.var(ecoli[i]))/np.min([len(ecoli[i]), len(ecoli_co[i])]))
-    x.append(i+1)
-    
-plt.plot(x, y, color='#E2E604')    
-plt.fill_between(x, y1=np.asarray(y)-np.asarray(y_co), y2=np.asarray(y)+np.asarray(y_co), color='#E2E604', alpha=0.25)
-plt.plot(x, y1, color='#008F8F')
-plt.fill_between(x, y1=np.asarray(y1)-np.asarray(y1_co), y2=np.asarray(y1)+np.asarray(y1_co), color='#008F8F', alpha=0.25)    
-plt.plot(x, y2, color='#9813DE')
-plt.fill_between(x, y1=np.asarray(y2)-np.asarray(y2_co), y2=np.asarray(y2)+np.asarray(y2_co), color='#9813DE', alpha=0.25)    
-
-plt.savefig('FigS2C.svg', dpi=300, facecolor='w', edgecolor='b',
-        orientation='portrait', format='svg',
-        transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
-plt.show()
+    print(stats.mannwhitneyu(ent[i], ent_co[i]))
+print('end ef')
 
 #%%
 """
@@ -1180,101 +1182,10 @@ plt.show()
 
 #%%
 """
-SI Figure S10
+SI Figure S10A
 
-SI Fig S10A-C Generated in MATLAB. See MATLAB scripts. 
+Stochastic-Spatial Model
 """
-
-
-#%%
-"""
-SI Figure S11A
-
-PDE Model Null no dispersal
-"""
-
-spatial_data = scipy.io.loadmat('Reaction_Diff_Model/spatial_data_SI_Fig_no_dispersal_long_.mat')
-data = {'ch1':spatial_data['ch1'].flatten(), 'ch2':spatial_data['ch2'].flatten(), 'ch3':spatial_data['ch3'].flatten(), 't':spatial_data['t'].flatten()}
-df = pd.DataFrame(data, columns=list(data.keys()))
-# df.to_excel('reaction_diffusion_unbiased.xlsx')
-
-plt.plot(df['t'], np.log10(df['ch1']), color='#E2E604')
-plt.plot(df['t'], np.log10(df['ch2']), color='#008F8F')
-plt.plot(df['t'], np.log10(round(df['ch3'], 2)), color='purple')
-plt.grid(False)
-plt.ylabel('Global Abundance', fontsize=20)
-plt.xticks(fontsize=20)
-plt.yticks(fontsize=20)
-plt.ylim(0,4)
-plt.xlim(0,8000)
-# plt.savefig('FigS11A.svg', dpi=300, facecolor='w', edgecolor='b',
-#         orientation='portrait', format='svg',
-#         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
-plt.show()
-
-#%%
-"""
-SI Figure S11B
-
-PDE Model Biased, Global Dispersal
-"""
-
-spatial_data = scipy.io.loadmat('Reaction_Diff_Model/spatial_data_SI_Fig_unBiased_global_.mat')
-data = {'ch1':spatial_data['ch1'].flatten(), 'ch2':spatial_data['ch2'].flatten(), 'ch3':spatial_data['ch3'].flatten(), 't':spatial_data['t'].flatten()}
-df = pd.DataFrame(data, columns=list(data.keys()))
-# df.to_excel('reaction_diffusion_biased.xlsx')
-
-plt.plot(df['t'], np.log10(df['ch1']), color='#E2E604')
-plt.plot(df['t'], np.log10(df['ch2']), color='#008F8F')
-plt.plot(df['t'], np.log10(df['ch3']), color='purple')
-plt.grid(False)
-plt.ylabel('Global Abundance', fontsize=20)
-plt.xticks(fontsize=20)
-plt.yticks(fontsize=20)
-plt.ylim(0,4)
-plt.xlim(0,8000)
-# plt.savefig('FigS11B.svg', dpi=300, facecolor='w', edgecolor='b',
-#         orientation='portrait', format='svg',
-#         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
-plt.show()
-
-
-    #%%
-"""
-SI Figure S11C
-
-PDE Model Unbiased, Global Dispersal
-"""
-
-spatial_data = scipy.io.loadmat('Reaction_Diff_Model/spatial_data_SI_Fig_biased_global_.mat')
-data = {'ch1':spatial_data['ch1'].flatten(), 'ch2':spatial_data['ch2'].flatten(), 'ch3':spatial_data['ch3'].flatten(), 't':spatial_data['t'].flatten()}
-df = pd.DataFrame(data, columns=list(data.keys()))
-# df.to_excel('reaction_diffusion_null.xlsx')
-
-plt.plot(df['t'], np.log10(df['ch1']), color='#E2E604')
-plt.plot(df['t'], np.log10(round(df['ch2'], 2)), color='#008F8F')
-plt.plot(df['t'], np.log10(round(df['ch3'], 2)), color='purple')
-plt.grid(False)
-plt.ylabel('Global Abundance', fontsize=20)
-plt.xticks(fontsize=20)
-plt.yticks(fontsize=20)
-plt.ylim(0,4)
-plt.xlim(0,8000)
-# plt.savefig('FigS11C.svg', dpi=300, facecolor='w', edgecolor='b',
-#         orientation='portrait', format='svg',
-#         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
-plt.show()
-#%%
-"""
-SI Figure S12D
-
-Rapid Mixing Stochastic-Spatial Model
-
-SI Figure S12A-C are taken from Fig 2A-C
-
-! -> Add data to excel sheet
-"""
-#%%
 
 df = pd.read_excel('Stochastic_Spatial_Model/no_dispersal_cont_20000.xlsx')
 
@@ -1293,15 +1204,18 @@ plt.xticks(fontsize=20, rotation=-45)
 plt.yticks(fontsize=20)
 plt.xlabel('Time',fontsize=20)
 plt.ylabel('Individuals',fontsize=20)
-plt.savefig('FigS12A.svg', dpi=300, facecolor='w', edgecolor='b',
-        orientation='portrait', format='svg',
-        transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
+# plt.savefig('FigS10A.svg', dpi=300, facecolor='w', edgecolor='b',
+#         orientation='portrait', format='svg',
+#         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
 
 
 #%%
+"""
+SI Figure S10B
+"""
 
-df = pd.read_excel('Stochastic_Spatial_Model/unbiiased_dispersal_cont_20000.xlsx')
+df = pd.read_excel('Stochastic_Spatial_Model/unbiased_dispersal_cont_20000.xlsx')
 
 time_array = list(df.index)
 spc_1 = df['Species1']
@@ -1318,12 +1232,15 @@ plt.xticks(fontsize=20, rotation=-45)
 plt.yticks(fontsize=20)
 plt.xlabel('Time',fontsize=20)
 plt.ylabel('Individuals',fontsize=20)
-plt.savefig('FigS12B.svg', dpi=300, facecolor='w', edgecolor='b',
-        orientation='portrait', format='svg',
-        transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
+# plt.savefig('FigS10B.svg', dpi=300, facecolor='w', edgecolor='b',
+#         orientation='portrait', format='svg',
+#         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
 
 #%%
+"""
+SI Figure S10C
+"""
 
 df = pd.read_excel('Stochastic_Spatial_Model/biased_dispersal_final_cont_20000.xlsx')
 
@@ -1342,12 +1259,18 @@ plt.xticks(fontsize=20, rotation=-45)
 plt.yticks(fontsize=20)
 plt.xlabel('Time',fontsize=20)
 plt.ylabel('Individuals',fontsize=20)
-plt.savefig('FigS12C.svg', dpi=300, facecolor='w', edgecolor='b',
-        orientation='portrait', format='svg',
-        transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
+# plt.savefig('FigS10C.svg', dpi=300, facecolor='w', edgecolor='b',
+#         orientation='portrait', format='svg',
+#         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
 
 #%%
+"""
+SI Figure S10D
+
+Rapid Mixing Stochastic-Spatial Model
+"""
+
 df = pd.read_excel('Stochastic_Spatial_Model/biased_dispersal_rapid_mixing_cont_20000.xlsx')
 
 time_array = list(df.index)
@@ -1365,19 +1288,210 @@ plt.xticks(fontsize=20, rotation=-45)
 plt.yticks(fontsize=20)
 plt.xlabel('Time',fontsize=20)
 plt.ylabel('Individuals',fontsize=20)
-plt.savefig('FigS12D.svg', dpi=300, facecolor='w', edgecolor='b',
-        orientation='portrait', format='svg',
-        transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
+
+# plt.savefig('FigS10D.svg', dpi=300, facecolor='w', edgecolor='b',
+#         orientation='portrait', format='svg',
+#         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
+plt.show()
+#%%
+"""
+SI Figure S11A
+
+Stochastic spatial model rep ternary plot
+
+Use the generate_ternary_plot code in the stochastic_spatial_model directory to generate data prior to running this section
+"""
+figure, tax = ternary.figure(scale=1.0)
+figure.set_size_inches(5, 5)
+tax.boundary()
+tax.gridlines(multiple=0.2, color="black")
+sax = tax.get_axes()
+
+volume_dataframe2 = pd.read_excel('Stochastic_Spatial_Model/biased_dispersal_vector_plot_cont_1000.xlsx')
+norm = mpl.colors.Normalize(vmin=0, vmax=1000)
+for i in np.arange(0,1000):    
+
+    cmap= Inferno_20.mpl_colormap
+        
+    color = cmap(norm(i))
+    pstart = ternary.project_point((volume_dataframe2['Species2'][i],volume_dataframe2['Species1'][i],volume_dataframe2['Species3'][i]))
+    
+    pend = ternary.project_point((volume_dataframe2['Species2'][i+1],volume_dataframe2['Species1'][i+1],volume_dataframe2['Species3'][i+1]))
+    
+    pstart_m = ternary.project_point((volume_dataframe2['Species2'][i],volume_dataframe2['Species1'][i],volume_dataframe2['Species3'][i]))
+    
+    pend_m = ternary.project_point((volume_dataframe2['Species2'][i+1],volume_dataframe2['Species1'][i+1],volume_dataframe2['Species3'][i+1]))    
+    
+    mag = 1
+    
+    stepsize = np.sqrt((pend[0]-pstart[0])**2+(pend[1]-pstart[1])**2)
+    
+    dxy = (pend - pstart)*.95
+
+    lw=1
+
+    sax.arrow(*pstart, *dxy, linewidth=lw, color=color, head_width=0.02, alpha=.25)
+    if i == 0:
+        sax.scatter(*pstart, marker=(5, 1), color='black')
+
+tax.get_axes().axis('off')
+tax.clear_matplotlib_ticks()
+# tax.savefig('single_run_trace.svg', dpi=300, facecolor='w', edgecolor='b',
+#             orientation='portrait', format='svg',
+#             transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
+tax.show()
+
+fig, ax = plt.subplots(figsize=(8,0.5))
+fig.subplots_adjust(bottom=0.5)
+cmap=Inferno_20.mpl_colormap
+norm = mpl.colors.Normalize(vmin=0, vmax=1000)
+# fig.colorbar(mpl.cm.ScalarMappable(norm=norm, cmap=cmap),
+#              cax=ax, orientation='horizontal', label='Time (h)')
+# plt.savefig('hot_colorbar.svg', dpi=300, facecolor='w', edgecolor='b',
+#             orientation='portrait', format='svg',
+#             transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
 
 #%%
 """
-SI Figure S13A
+SI Figure S11B
+
+Stochastic spatial model rep ternary plot
+
+Use the generate_ternary_plot_parallel_pool code in the stochastic_spatial_model directory to generate data prior to running this section
+"""
+#%%
+"""
+SI Figure S12A
+
+Pa invasion into the stochastic spatial model
+
+Run the invasion script in stochastic_spatial_models to generate data
+"""
+df = pd.read_csv('Stochastic_Spatial_Model/invasion_data/pa_invasion_biased_dispersal.csv')
+
+time_array = list(df.index)
+spc_1 = df['Species1']
+spc_2 = df['Species2']
+spc_3 = df['Species3']
+num_iter = len(df)
+
+plt.plot(time_array, spc_1, color='#9813DE', label=r'$\it{E. coli}$')
+plt.plot(time_array, spc_2, color='#E2E604', label=r'$\it{P. aeruginosa}$')
+plt.plot(time_array, spc_3, color='#008F8F', label=r'$\it{E. faecalis}$')
+plt.ylim(-5,2100)
+plt.xlim(-5,num_iter)
+plt.xticks(fontsize=20, rotation=-45)
+plt.yticks(fontsize=20)
+plt.xlabel('Time',fontsize=20)
+plt.ylabel('Individuals',fontsize=20)
+
+# plt.savefig('FigS12A.svg', dpi=300, facecolor='w', edgecolor='b',
+#         orientation='portrait', format='svg',
+#         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
+plt.show()
+
+#%%
+"""
+SI Figure S12B
+
+Ec invasion into the stochastic spatial model
+"""
+df = pd.read_csv('Stochastic_Spatial_Model/invasion_data/ec_invasion_biased_dispersal.csv')
+
+time_array = list(df.index)
+spc_1 = df['Species1']
+spc_2 = df['Species2']
+spc_3 = df['Species3']
+num_iter = len(df)
+
+plt.plot(time_array, spc_1, color='#9813DE', label=r'$\it{E. coli}$')
+plt.plot(time_array, spc_2, color='#E2E604', label=r'$\it{P. aeruginosa}$')
+plt.plot(time_array, spc_3, color='#008F8F', label=r'$\it{E. faecalis}$')
+plt.ylim(-5,2100)
+plt.xlim(-5,num_iter)
+plt.xticks(fontsize=20, rotation=-45)
+plt.yticks(fontsize=20)
+plt.xlabel('Time',fontsize=20)
+plt.ylabel('Individuals',fontsize=20)
+
+# plt.savefig('FigS12B.svg', dpi=300, facecolor='w', edgecolor='b',
+#         orientation='portrait', format='svg',
+#         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
+plt.show()
+#%%
+"""
+SI Figure S12C
+
+Ef invasion into the stochastic spatial model
+"""
+df = pd.read_csv('Stochastic_Spatial_Model/invasion_data/ef_invasion_biased_dispersal.csv')
+
+time_array = list(df.index)
+spc_1 = df['Species1']
+spc_2 = df['Species2']
+spc_3 = df['Species3']
+num_iter = len(df)
+
+plt.plot(time_array, spc_1, color='#9813DE', label=r'$\it{E. coli}$')
+plt.plot(time_array, spc_2, color='#E2E604', label=r'$\it{P. aeruginosa}$')
+plt.plot(time_array, spc_3, color='#008F8F', label=r'$\it{E. faecalis}$')
+plt.ylim(-5,2100)
+plt.xlim(-5,num_iter)
+plt.xticks(fontsize=20, rotation=-45)
+plt.yticks(fontsize=20)
+plt.xlabel('Time',fontsize=20)
+plt.ylabel('Individuals',fontsize=20)
+
+# plt.savefig('FigS12C.svg', dpi=300, facecolor='w', edgecolor='b',
+#         orientation='portrait', format='svg',
+#         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
+plt.show()
+#%%
+"""
+SI Figure S14 was made in MATLAB using the scripts found in the Mean_Field_Model directory
+"""
+#%%
+"""
+SI Figure S15A
+
+PA14 change predicted by abundance
+Monoculture PA14 change predicted by abundance
+Triculture data taken from Fig2E
+"""
+
+df = pd.read_excel('SI_Data.xlsx', sheet_name='FigS15A_1')
+x = df['v']
+y = df['dv']
+
+df2 = pd.read_excel('SI_Data.xlsx', sheet_name='FigS15A_2')
+x2 = df2['v']
+y2 = df2['dv']
+
+slope3, intercept3, r_value3, p_value3, std_err3 = stats.linregress(x, y)
+slope2, intercept2, r_value2, p_value2, std_err2 = stats.linregress(x2, y2)
+
+sns.regplot(x=x2, y=y2, color = 'black', line_kws={'label':"y={0:.1f}x+{1:.1f}, r={2:.1f},  p={3:.4f}".format(slope2,intercept2, r_value2, p_value2)})
+sns.regplot(x=x, y=y, color = '#E2E604', line_kws={'label':"y={0:.1f}x+{1:.1f}, r={2:.1f},  p={3:.4f}".format(slope3,intercept3, r_value3, p_value3)})
+plt.ylabel(r'dv_pa14/dt', fontsize=20)
+plt.xlabel(r'v_pa14', fontsize=20)
+plt.xticks(fontsize=20, rotation=-90)
+plt.yticks(fontsize=20)
+plt.legend()
+plt.hlines(0, 0, 600000, color='red', linestyles='--', alpha=0.5)
+# plt.savefig('FigS15A.svg', dpi=300, facecolor='w', edgecolor='b',
+#         orientation='portrait', format='svg',
+#         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
+plt.show()
+
+#%%
+"""
+SI Figure S15B
 
 Species change as a fraction. V1-V0 over V0
 """
 
-df = pd.read_excel('SI_Data.xlsx', sheet_name='FigS13A')
+df = pd.read_excel('SI_Data.xlsx', sheet_name='FigS15B')
 
 Pa = df['Pa']
 Ec = df['Ec']
@@ -1397,52 +1511,19 @@ plt.xlabel(r'dv_pa14', fontsize=20)
 plt.xticks(fontsize=20, rotation=-90)
 plt.yticks(fontsize=20)
 plt.legend()
-# plt.savefig('FigS13A.svg', dpi=300, facecolor='w', edgecolor='b',
+# plt.savefig('FigS15B.svg', dpi=300, facecolor='w', edgecolor='b',
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
 
 #%%
 """
-SI Figure S13B
-
-PA14 change predicted by abundance
-Monoculture PA14 change predicted by abundance
-Triculture data taken from Fig2E
-"""
-
-df = pd.read_excel('SI_Data.xlsx', sheet_name='FigS13B_1')
-x = df['v']
-y = df['dv']
-
-df2 = pd.read_excel('SI_Data.xlsx', sheet_name='FigS13B_2')
-x2 = df2['v']
-y2 = df2['dv']
-
-slope3, intercept3, r_value3, p_value3, std_err3 = stats.linregress(x, y)
-slope2, intercept2, r_value2, p_value2, std_err2 = stats.linregress(x2, y2)
-
-sns.regplot(x=x2, y=y2, color = 'black', line_kws={'label':"y={0:.1f}x+{1:.1f}, r={2:.1f},  p={3:.4f}".format(slope2,intercept2, r_value2, p_value2)})
-sns.regplot(x=x, y=y, color = '#E2E604', line_kws={'label':"y={0:.1f}x+{1:.1f}, r={2:.1f},  p={3:.4f}".format(slope3,intercept3, r_value3, p_value3)})
-plt.ylabel(r'dv_pa14/dt', fontsize=20)
-plt.xlabel(r'v_pa14', fontsize=20)
-plt.xticks(fontsize=20, rotation=-90)
-plt.yticks(fontsize=20)
-plt.legend()
-plt.hlines(0, 0, 600000, color='red', linestyles='--', alpha=0.5)
-# plt.savefig('FigS13B.svg', dpi=300, facecolor='w', edgecolor='b',
-#         orientation='portrait', format='svg',
-#         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
-plt.show()
-
-#%%
-"""
-SI Figure S13C
+SI Figure S15C
 
 Species change predicts density change
 """
 
-df = pd.read_excel('SI_Data.xlsx', sheet_name='FigS13C')
+df = pd.read_excel('SI_Data.xlsx', sheet_name='FigS15C')
 
 x = df['x']
 y = df['y']
@@ -1454,14 +1535,14 @@ plt.xlabel(r'v_pa14', fontsize=20)
 plt.xticks(fontsize=20, rotation=-90)
 plt.yticks(fontsize=20)
 plt.legend()
-# plt.savefig('FigS13C.svg', dpi=300, facecolor='w', edgecolor='b',
+# plt.savefig('FigS15C.svg', dpi=300, facecolor='w', edgecolor='b',
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
 
 #%%
 """
-SI Figure S14B 
+SI Figure S16B 
 
 Autocorrelation 
 """
@@ -1479,7 +1560,7 @@ plt.xticks(ticks=[1,2, 3], labels=plot_dict_post.keys(), fontsize=18)
 plt.yticks(fontsize=18)
 plt.grid(False)
 plt.ylabel('Autocorrelation Length ($\mu$m$^3$)', fontsize=18)
-# plt.savefig('FigS14B.svg', dpi=300, facecolor='w', edgecolor='b',
+# plt.savefig('FigS16B.svg', dpi=300, facecolor='w', edgecolor='b',
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
@@ -1490,7 +1571,7 @@ print(stats.mannwhitneyu(plot_dict_post['PA14'], plot_dict_post['Ecoli']))
 
 #%%
 """
-SI Figure S14C
+SI Figure S16C
 
 Distance to Nearest Neighbor
 """
@@ -1508,40 +1589,44 @@ plt.xticks(ticks=[1,2,3], labels=plot_dict_post.keys(), fontsize=18)
 plt.yticks(fontsize=18)
 plt.ylabel('Length ($\mu$m)', fontsize=18)
 plt.grid(False)
-# plt.savefig('FigS14C.svg', dpi=300, facecolor='w', edgecolor='b',
+# plt.savefig('FigS16C.svg', dpi=300, facecolor='w', edgecolor='b',
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
 print(stats.mannwhitneyu(plot_dict_post['Pa_Ec'], plot_dict_post['Pa_Ef']))
 print(stats.mannwhitneyu(plot_dict_post['Ec_Ef'], plot_dict_post['Pa_Ef']))
 print(stats.mannwhitneyu(plot_dict_post['Ec_Ef'], plot_dict_post['Pa_Ec']))
+#%%
+"""
+SI Figure S17 and S18 are .tiff files exported form ZEN Blue
+"""
 
 #%%
 """
-SI Figure S17A
+SI Figure S19A
 
 Histogram of Local Density. Paper figure generated in BiofilmQ.
 """
-df = pd.read_excel('SI_Data.xlsx', sheet_name='FigS17A')
+df = pd.read_excel('SI_Data.xlsx', sheet_name='FigS19A')
 
 plt.hist(df['bqsS'].dropna(), bins=50, color='green', alpha=0.5)
 plt.hist(df['WT'].dropna(), bins=50, color='black', alpha=0.5)
-# plt.savefig('FigS17A.svg', dpi=300, facecolor='w', edgecolor='b',
+# plt.savefig('FigS19A.svg', dpi=300, facecolor='w', edgecolor='b',
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
 
 #%%
 """
-SI Figure S17B
+SI Figure S19B
 
 Histogram of Joint Local Density
 
 Paper has the tops of the bars summing to one. This plot has the area under the curve equaling 1. 
 """
 
-df1 = pd.read_excel('SI_Data.xlsx', sheet_name='FigS17B_2')
-df2 = pd.read_excel('SI_Data.xlsx', sheet_name='FigS17B_1')
+df1 = pd.read_excel('SI_Data.xlsx', sheet_name='FigS19B_2')
+df2 = pd.read_excel('SI_Data.xlsx', sheet_name='FigS19B_1')
 
 bqsS = df1['Pa_bqsS_Density10']
 wt = df2['Pa_WT_Density10um']
@@ -1551,17 +1636,17 @@ plt.hist(wt, bins=20, density = True, color='black', alpha=0.5)
 plt.xlabel('Joint Local Density')
 plt.ylabel('Normalized Frequency')
 plt.title('Tri-Culture')
-# plt.savefig('FigS17B.svg', dpi=300, facecolor='w', edgecolor='b',
+# plt.savefig('FigS19B.svg', dpi=300, facecolor='w', edgecolor='b',
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
 
 #%%
 """
-SI Figure S17C
+SI Figure S19C
 """
 
-df = pd.read_excel('SI_Data.xlsx', sheet_name='FigS17C')
+df = pd.read_excel('SI_Data.xlsx', sheet_name='FigS19C')
 x = df['pa']
 y = df['dv_pa']
 
@@ -1575,18 +1660,18 @@ plt.hlines(0, xmin=-10000, xmax=630000, color='red', linestyles='--')
 plt.xlim(-10000,630000)
 plt.ylim(-22000,22000)
 plt.legend()
-# plt.savefig('FigS17C.svg', dpi=300, facecolor='w', edgecolor='b',
+# plt.savefig('FigS19C.svg', dpi=300, facecolor='w', edgecolor='b',
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
 
 #%%
 """
-SI Figure S18A
+SI Figure S20A
 
 Invasion First Time Point
 """
-df = pd.read_excel('SI_Data.xlsx', sheet_name='FigS18A').T.reset_index()
+df = pd.read_excel('SI_Data.xlsx', sheet_name='FigS20A').T.reset_index()
 
 new_header = df.iloc[0] 
 df = df[1:] 
@@ -1599,18 +1684,18 @@ sns.boxplot(df)
 plt.grid(False)
 plt.xticks(rotation=90)
 plt.ylabel(r'Biovolume', fontsize=18)
-# plt.savefig('FigS18A.svg', dpi=300, facecolor='w', edgecolor='b',
+# plt.savefig('FigS20A.svg', dpi=300, facecolor='w', edgecolor='b',
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
 
 #%%
 """
-SI Figure S18B
+SI Figure S20B
 
 Invasion Second Time Point
 """
-df = pd.read_excel('SI_Data.xlsx', sheet_name='FigS18B').T.reset_index()
+df = pd.read_excel('SI_Data.xlsx', sheet_name='FigS20B').T.reset_index()
 
 new_header = df.iloc[0] 
 df = df[1:] 
@@ -1622,16 +1707,16 @@ sns.boxplot(df)
 plt.grid(False)
 plt.xticks(rotation=90)
 plt.ylabel(r'Biovolume', fontsize=18)
-# plt.savefig('FigS18B.svg', dpi=300, facecolor='w', edgecolor='b',
+# plt.savefig('FigS20B.svg', dpi=300, facecolor='w', edgecolor='b',
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
 
 #%%
 """
-SI Figure S18C_1
+SI Figure S20C_1
 """
-df = pd.read_excel('SI_Data.xlsx', sheet_name='FigS18C_1').T.reset_index()
+df = pd.read_excel('SI_Data.xlsx', sheet_name='FigS20C_1').T.reset_index()
 
 new_header = df.iloc[0] 
 df = df[1:] 
@@ -1646,15 +1731,15 @@ for i in np.arange(1,len(df)+1):
         plt.plot([90,96,112], [0,df['Ec_0_bqsS'][i],df['Ec_16_bqsS'][i]], color='green', linestyle='dashed')
 plt.xlim(85, 117)
 plt.hlines(y=40000, xmin=80, xmax=170, color='#9813DE', linestyle='--', alpha=0.5)
-# plt.savefig('FigS18C_1.svg', dpi=300, facecolor='w', edgecolor='b',
+# plt.savefig('FigS20C_1.svg', dpi=300, facecolor='w', edgecolor='b',
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
 #%%
 """
-SI Figure S18C_2
+SI Figure 20C_2
 """
-df = pd.read_excel('SI_Data.xlsx', sheet_name='FigS18C_2').T.reset_index()
+df = pd.read_excel('SI_Data.xlsx', sheet_name='FigS20C_2').T.reset_index()
 
 new_header = df.iloc[0] 
 df = df[1:] 
@@ -1669,16 +1754,16 @@ for i in np.arange(1,len(df)+1):
         plt.plot([90,96,112], [0,df['Ef_0_bqsS'][i],df['Ef_16_bqsS'][i]], color='green', linestyle='dashed')
 plt.hlines(y=80000, xmin=80, xmax=170, color='#008F8F', linestyle='--', alpha=0.5)
 plt.xlim(85, 117)
-# plt.savefig('FigS18C_2.svg', dpi=300, facecolor='w', edgecolor='b',
+# plt.savefig('FigS20C_2.svg', dpi=300, facecolor='w', edgecolor='b',
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
 
 #%%
 """
-SI Figure S18C_3
+SI Figure S20C_3
 """ 
-df = pd.read_excel('SI_Data.xlsx', sheet_name='FigS18C_3').T.reset_index()
+df = pd.read_excel('SI_Data.xlsx', sheet_name='FigS20C_3').T.reset_index()
 
 new_header = df.iloc[0] 
 df = df[1:] 
@@ -1693,87 +1778,7 @@ for i in np.arange(1,len(df)+1):
         plt.plot([90,96,112], [0,df['Pa_0_bqsS'][i],df['Pa_16_bqsS'][i]], color='green', linestyle='dashed')
 plt.hlines(y=300000, xmin=80, xmax=170, color='#E2E604', linestyle='--', alpha=0.5)
 plt.xlim(85, 117)
-# plt.savefig('FigS18C_2.svg', dpi=300, facecolor='w', edgecolor='b',
+# plt.savefig('FigS20C_2.svg', dpi=300, facecolor='w', edgecolor='b',
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
-
-#%%
-"""
-SI_Figure_Letter_to_Reviewers
-
-local dispersal version of PDE model
-
-Null model is taken from Si Figure S11 A
-""" 
-#%%
-"""
-PDE Model unBiased, local Dispersal
-"""
-
-spatial_data = scipy.io.loadmat('Reaction_Diff_Model/spatial_data_SI_Fig_pa_local_dispersal_.mat')
-data = {'ch1':spatial_data['ch1'].flatten(), 'ch2':spatial_data['ch2'].flatten(), 'ch3':spatial_data['ch3'].flatten(), 't':spatial_data['t'].flatten()}
-df = pd.DataFrame(data, columns=list(data.keys()))
-# df.to_excel('reaction_diffusion_unbiased.xlsx')
-
-plt.plot(df['t'], np.log10(df['ch1']), color='#E2E604')
-plt.plot(df['t'], np.log10(df['ch2']), color='#008F8F')
-plt.plot(df['t'], np.log10(round(df['ch3'], 2)), color='purple')
-plt.grid(False)
-plt.ylabel('Global Abundance', fontsize=20)
-plt.xticks(fontsize=20)
-plt.yticks(fontsize=20)
-plt.ylim(0,4)
-plt.xlim(0,8000)
-# plt.savefig('FigS_Local_Dispersal_Pa.svg', dpi=300, facecolor='w', edgecolor='b',
-#         orientation='portrait', format='svg',
-#         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
-# plt.show()
-
-#%%
-"""
-PDE Model Unbiased, local Dispersal
-"""
-
-spatial_data = scipy.io.loadmat('Reaction_Diff_Model/spatial_data_SI_Fig_unBiased_long_.mat')
-data = {'ch1':spatial_data['ch1'].flatten(), 'ch2':spatial_data['ch2'].flatten(), 'ch3':spatial_data['ch3'].flatten(), 't':spatial_data['t'].flatten()}
-df = pd.DataFrame(data, columns=list(data.keys()))
-# df.to_excel('reaction_diffusion_unbiased.xlsx')
-
-plt.plot(df['t'], np.log10(df['ch1']), color='#E2E604')
-plt.plot(df['t'], np.log10(df['ch2']), color='#008F8F')
-plt.plot(df['t'], np.log10(round(df['ch3'], 2)), color='purple')
-plt.grid(False)
-plt.ylabel('Global Abundance', fontsize=20)
-plt.xticks(fontsize=20)
-plt.yticks(fontsize=20)
-plt.ylim(0,4)
-plt.xlim(0,8000)
-# plt.savefig('FigS_local_dispersal_unbiased.svg', dpi=300, facecolor='w', edgecolor='b',
-#         orientation='portrait', format='svg',
-#         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
-# plt.show()
-
-#%%
-"""
-PDE Model Biased, local Dispersal
-"""
-
-spatial_data = scipy.io.loadmat('Reaction_Diff_Model/spatial_data_SI_Fig_Biased_long_.mat')
-data = {'ch1':spatial_data['ch1'].flatten(), 'ch2':spatial_data['ch2'].flatten(), 'ch3':spatial_data['ch3'].flatten(), 't':spatial_data['t'].flatten()}
-df = pd.DataFrame(data, columns=list(data.keys()))
-# df.to_excel('reaction_diffusion_biased.xlsx')
-
-plt.plot(df['t'], np.log10(df['ch1']), color='#E2E604')
-plt.plot(df['t'], np.log10(df['ch2']), color='#008F8F')
-plt.plot(df['t'], np.log10(df['ch3']), color='purple')
-plt.grid(False)
-plt.ylabel('Global Abundance', fontsize=20)
-plt.xticks(fontsize=20)
-plt.yticks(fontsize=20)
-plt.ylim(0,4)
-plt.xlim(0,8000)
-# plt.savefig('FigS_local_dispersal_biased.svg', dpi=300, facecolor='w', edgecolor='b',
-#         orientation='portrait', format='svg',
-#         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
-# plt.show()
