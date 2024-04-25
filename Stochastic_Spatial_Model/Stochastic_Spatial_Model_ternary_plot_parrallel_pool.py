@@ -122,7 +122,7 @@ def run_simulation(ec_start, pa_start, ef_start, identifier, gpa=gpa, gec=gec, g
     dispersal_counter = []
     simulation_time = []
     
-    x = np.random.choice([0,1,2,3],[L,L], p=[0.7,ec_start,pa_start,ef_start])
+    x = np.random.choice([0,1,2,3],[L,L],  p=[0.7,0.3*ec_start,0.3*pa_start,0.3*ef_start])
     
     for i in range(num_iter):
         species=[0,0,0]
