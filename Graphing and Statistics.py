@@ -9,7 +9,8 @@ This script replicates the figures present in the paper using the provided datas
 The figures in the paper were generated directly from .mat files or .tiff files, 
 which were in turn generated using BiofilmQ. 
 """
-
+import glob
+from itertools import product
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -19,7 +20,7 @@ import seaborn as sns
 import matplotlib as mpl
 from ast import literal_eval
 from palettable.colorbrewer.sequential import Greys_6_r
-from palettable.colorbrewer.sequential import Inferno_20
+from palettable.matplotlib  import Inferno_20
 
 #%%
 """
@@ -1361,6 +1362,169 @@ Stochastic spatial model ternary plot
 
 Use the generate_ternary_plot_parallel_pool code in the stochastic_spatial_model directory to generate data
 """
+file_list = glob.glob('Stochastic_Spatial_Model/ternary_plot/*.xlsx', recursive=False)
+
+#Define the range and increments
+start = 0
+stop = 1
+increment = 0.1
+
+# Calculate the number of steps
+num_steps = int((stop - start) / increment) + 1
+
+# Generate all combinations
+combinations = list(product(range(num_steps), repeat=3))
+
+# Convert combinations to actual values
+result = [[start + c[0] * increment, start + c[1] * increment, start + c[2] * increment] for c in combinations]
+
+# Print the result
+for combination in result:
+    print(combination)
+
+averaged = {'Species1':[], 'Species2':[], 'Species3':[]}
+
+averaged_dispersal = {'Species1':[], 'Species2':[], 'Species3':[]}
+
+result_final = []
+
+for value in result:
+    if round(np.sum(value), 2) == 1:
+        result_final.append(value)
+        
+for i in np.arange(0,len(result_final)):
+    
+    if 1 in result_final:
+        print(result_final)
+    if 1 not in result_final:
+            
+        start_to_average_1 = []
+        end_to_average_1 = []
+        start_to_average_2 = []
+        end_to_average_2 = []
+        start_to_average_3 = []
+        end_to_average_3 = []
+        step = increment
+        
+        for file in file_list:
+            
+            volume_dataframe= pd.read_excel(file)
+            
+            quadrant = volume_dataframe.drop(volume_dataframe[(volume_dataframe['Species1'] <= result_final[i][0]-step) |
+                                               (volume_dataframe['Species1'] > result_final[i][0]) |
+                                               (volume_dataframe['Species3'] <= result_final[i][1]-step) |
+                                               (volume_dataframe['Species3'] > result_final[i][1]) |
+                                               (volume_dataframe['Species2'] <= result_final[i][2]-step) |
+                                               (volume_dataframe['Species2'] > result_final[i][2])| (volume_dataframe['Dispersal'] == 1)].index)
+            
+            look_length = 90
+            for item in quadrant.index:
+                if (item+look_length in volume_dataframe.index) and (quadrant['Iteration'][item] == volume_dataframe['Iteration'][item+look_length]) and (1 not in volume_dataframe['Dispersal'][item:item+look_length] ):
+                    start_to_average_1.append(quadrant['Species1'][item])
+                    end_to_average_1.append(volume_dataframe['Species1'][item+look_length])
+                    start_to_average_2.append(quadrant['Species2'][item])
+                    end_to_average_2.append(volume_dataframe['Species2'][item+look_length])    
+                    start_to_average_3.append(quadrant['Species3'][item])
+                    end_to_average_3.append(volume_dataframe['Species3'][item+look_length])    
+            
+        averaged['Species1'].append([np.mean(start_to_average_1), np.mean(end_to_average_1)])
+        averaged['Species2'].append([np.mean(start_to_average_2), np.mean(end_to_average_2)])
+        averaged['Species3'].append([np.mean(start_to_average_3), np.mean(end_to_average_3)])
+        
+for i in np.arange(0,len(result_final)):
+    
+    if 1 in result_final:
+        print(result_final)
+    if 1 not in result_final:
+            
+        start_to_average_1 = []
+        end_to_average_1 = []
+        start_to_average_2 = []
+        end_to_average_2 = []
+        start_to_average_3 = []
+        end_to_average_3 = []
+        step = increment
+        
+        for file in file_list:
+            
+            volume_dataframe= pd.read_excel(file)        
+            
+            quadrant = volume_dataframe.drop(volume_dataframe[(volume_dataframe['Species1'] <= result_final[i][0]-step) |
+                                               (volume_dataframe['Species1'] > result_final[i][0]) |
+                                               (volume_dataframe['Species3'] <= result_final[i][1]-step) |
+                                               (volume_dataframe['Species3'] > result_final[i][1]) |
+                                               (volume_dataframe['Species2'] <= result_final[i][2]-step) |
+                                               (volume_dataframe['Species2'] > result_final[i][2]) | (volume_dataframe['Dispersal'] == 0)].index)
+            
+            look_length = 1
+            for item in quadrant.index:
+                if (item+look_length in volume_dataframe.index) and (quadrant['Iteration'][item] == volume_dataframe['Iteration'][item+look_length]):
+                    start_to_average_1.append(quadrant['Species1'][item])
+                    end_to_average_1.append(volume_dataframe['Species1'][item+look_length])
+                    start_to_average_2.append(quadrant['Species2'][item])
+                    end_to_average_2.append(volume_dataframe['Species2'][item+look_length])    
+                    start_to_average_3.append(quadrant['Species3'][item])
+                    end_to_average_3.append(volume_dataframe['Species3'][item+look_length])    
+            
+        averaged_dispersal['Species1'].append([np.mean(start_to_average_1), np.mean(end_to_average_1)])
+        averaged_dispersal['Species2'].append([np.mean(start_to_average_2), np.mean(end_to_average_2)])
+        averaged_dispersal['Species3'].append([np.mean(start_to_average_3), np.mean(end_to_average_3)])
+
+volume_dataframe_average = pd.DataFrame(data=averaged)
+volume_dataframe_average_disp = pd.DataFrame(data=averaged_dispersal)
+
+figure, tax = ternary.figure(scale=1.0)
+figure.set_size_inches(5, 5)
+color_dictionary = {r"$E. coli$":'#9813DE', r'$E. faecalis$':'#008F8F',r"$P. aeruginosa$":'#E2E604'}
+
+tax.boundary()
+tax.gridlines(multiple=0.2, color="black")
+
+for i in np.arange(0,len(volume_dataframe_average)):
+    if 1 not in [volume_dataframe_average['Species1'][i][0],volume_dataframe_average['Species2'][i][0],volume_dataframe_average['Species3'][i][0]]:    
+        pstart = ternary.project_point((volume_dataframe_average['Species1'][i][0],volume_dataframe_average['Species2'][i][0],volume_dataframe_average['Species3'][i][0]))
+        pend = ternary.project_point((volume_dataframe_average['Species1'][i][1],volume_dataframe_average['Species2'][i][1],volume_dataframe_average['Species3'][i][1]))
+        pstart_m = ternary.project_point((volume_dataframe_average['Species1'][i][0],volume_dataframe_average['Species2'][i][0],volume_dataframe_average['Species3'][i][0]))
+        pend_m = ternary.project_point((volume_dataframe_average['Species1'][i][1],volume_dataframe_average['Species2'][i][1],volume_dataframe_average['Species3'][i][1]))    
+
+        mag = 1
+        
+
+        dxy = (pend - pstart)*.25
+    
+        lw=1
+    
+        sax.arrow(*pstart, *dxy, linewidth=lw, color='black', head_width=0.025, alpha=.5)
+        
+for i in np.arange(0,len(volume_dataframe_average_disp)):
+    if 1 not in [volume_dataframe_average_disp['Species1'][i][0],volume_dataframe_average_disp['Species2'][i][0],volume_dataframe_average_disp['Species3'][i][0]]:    
+        # to_plot[0] = [literal_eval(x) for x in to_plot[0]]
+        # print(to_plot[0])
+        pstart = ternary.project_point((volume_dataframe_average_disp['Species1'][i][0],volume_dataframe_average_disp['Species2'][i][0],volume_dataframe_average_disp['Species3'][i][0]))
+        
+        pend = ternary.project_point((volume_dataframe_average_disp['Species1'][i][1],volume_dataframe_average_disp['Species2'][i][1],volume_dataframe_average_disp['Species3'][i][1]))
+        
+        pstart_m = ternary.project_point((volume_dataframe_average_disp['Species1'][i][0],volume_dataframe_average_disp['Species2'][i][0],volume_dataframe_average_disp['Species3'][i][0]))
+        
+        pend_m = ternary.project_point((volume_dataframe_average_disp['Species1'][i][1],volume_dataframe_average_disp['Species2'][i][1],volume_dataframe_average_disp['Species3'][i][1]))    
+        
+        mag = 1
+        
+        stepsize = np.sqrt((pend[0]-pstart[0])**2+(pend[1]-pstart[1])**2)
+        
+
+        dxy = (pend - pstart)
+    
+        lw=1
+    
+        sax.arrow(*pstart, *dxy, linewidth=lw, color='red', head_width=0.025, alpha=.5)
+
+tax.get_axes().axis('off')
+tax.clear_matplotlib_ticks()
+# tax.savefig('SI_Figure_S11B.svg', dpi=300, facecolor='w', edgecolor='b',
+#             orientation='portrait', format='svg',
+#             transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
+tax.show()
 #%%
 """
 SI Figure S12A
