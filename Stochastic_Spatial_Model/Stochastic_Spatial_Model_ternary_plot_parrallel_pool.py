@@ -26,7 +26,7 @@ import os
 plt.rcParams["font.family"] = "serif"
 plt.rcParams["font.serif"] = "Times New Roman"
 #names for folders
-experiment_title = 'ternary_plot_f'
+experiment_title = 'ternary_plot'
 
 if os.path.isdir(experiment_title)==False:
     os.system('mkdir '+experiment_title)
