@@ -1307,6 +1307,7 @@ tax.boundary()
 tax.gridlines(multiple=0.2, color="black")
 sax = tax.get_axes()
 
+#grab one of the runs with a 0.33,0.33,0.33 starting condition for this
 volume_dataframe2 = pd.read_excel('Stochastic_Spatial_Model/biased_dispersal_vector_plot_cont_1000.xlsx')
 norm = mpl.colors.Normalize(vmin=0, vmax=1000)
 for i in np.arange(0,1000):    
@@ -1356,9 +1357,9 @@ plt.show()
 """
 SI Figure S11B
 
-Stochastic spatial model rep ternary plot
+Stochastic spatial model ternary plot
 
-Use the generate_ternary_plot_parallel_pool code in the stochastic_spatial_model directory to generate data prior to running this section
+Use the generate_ternary_plot_parallel_pool code in the stochastic_spatial_model directory to generate data
 """
 #%%
 """
