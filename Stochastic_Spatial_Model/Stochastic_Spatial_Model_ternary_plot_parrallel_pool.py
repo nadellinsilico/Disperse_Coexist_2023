@@ -58,7 +58,7 @@ identifier_start_list = []
 
 identity = 0
 for value in to_test:
-    if round(np.sum(value), 2) == 1:
+    if round(np.sum(value), 2) == 1 and 0 not in value:
         for c in np.arange(0,reps):
             identity+=1
             ec_start_list.append(value[0])
