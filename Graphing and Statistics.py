@@ -21,7 +21,6 @@ import matplotlib as mpl
 from ast import literal_eval
 from palettable.colorbrewer.sequential import Greys_6_r
 from palettable.matplotlib  import Inferno_20
-
 #%%
 """
 Figure 1A
@@ -51,7 +50,6 @@ plt.title('Liquid Shaking Culture (24 hr Back Dilutions)')
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
-
 #%%
 """
 Figure 1B
@@ -81,7 +79,6 @@ plt.title('Biofilm Culture')
 #         orientation='portrait', format='svg',|
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
-
  #%%
 """
 Figure 1C , SI Figure S2B
@@ -176,7 +173,6 @@ plt.ylim(-10000,600000)
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
-
 #%%
 """
 Figure 1D
@@ -245,8 +241,6 @@ fig.colorbar(mpl.cm.ScalarMappable(norm=norm, cmap=cmap),
 #             orientation='portrait', format='svg',
 #             transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
-
-
 #%%
 """
 Figure 2A, SI Figure 2A
@@ -274,7 +268,6 @@ plt.ylabel('Individuals',fontsize=20)
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
-
 #%%
 """
 Figure 2B, SI Figure 2B 
@@ -302,7 +295,6 @@ plt.ylabel('Individuals',fontsize=20)
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
-
 #%%
 """
 Figure 2C, SI Figure 2C
@@ -331,7 +323,6 @@ plt.grid(False)
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
-
 #%%
 """
 Figure 2D
@@ -355,7 +346,6 @@ plt.grid(False)
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
-
 #%%
 """
 Figure 2E
@@ -379,7 +369,6 @@ plt.legend()
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
-
 #%%
 """
 Figure 2F
@@ -408,7 +397,6 @@ plt.legend()
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
-
 #%%
 """
 Figure 2G
@@ -433,7 +421,6 @@ plt.grid(False)
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
-
 #%%
 """
 Figure 2H
@@ -536,7 +523,6 @@ plt.ylabel(r'Relative Abundance', fontsize=18)
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
-
 #%%
 """
 Figure 3C
@@ -586,7 +572,6 @@ plt.grid(False)
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
-
 #%%
 """
 Figure 3D
@@ -617,7 +602,6 @@ plt.grid(False)
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
-
 #%%
 """
 Figure 4A
@@ -646,7 +630,6 @@ plt.grid(False)
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
 print(stats.mannwhitneyu(plot_dict_pre['WT'], plot_dict_pre['$\Delta bqsS$']))
-
 #%%
 """
 Figure 4B
@@ -672,8 +655,6 @@ plt.grid(False)
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
 print(stats.mannwhitneyu(plot_dict_post['WT'], plot_dict_post['$\Delta bqsS$']))
-
-
 #%%
 """
 Figure 4C
@@ -697,7 +678,6 @@ plt.grid(False)
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
 print(stats.mannwhitneyu(plot_dict_post['WT'], plot_dict_post['$\Delta bqsS$']))
-
 #%%
 """
 Figure 4E
@@ -727,7 +707,6 @@ plt.grid(False)
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
-
 #%%
 """
 Figure 4F
@@ -756,7 +735,6 @@ plt.grid(False)
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
-
 #%%
 """
 SI Figure S2A
@@ -879,60 +857,6 @@ plt.ylim(-10000,500000)
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
-
-#%%
-"""
-SI Figure 2C
-
-Stats for SI Figure 2C
-
-Same data as Figure 1C
-"""
-
-ecoli_co = [([327.31799833195225, 74739.97154885676,  30178.86602171233, 2272,10348]), 
-            ([337654.3018299466, 16377.00412162256, 102800.81758497875, 65958.14699239816,  17644.44592143285, 
-                     60281.3781279211, 22315.762891329276, 226175.7079400265, 87119.63391914888, 83563]),
-            ([174980.53583302326, 131468.29809900734, 2172.6553144305585, 291359.03185848374, 293299.52973667695, 
-                     199684.7876095191, 233148.2572287676, 90213.35726961477, 34802.62569790094, 22346.36296689037, 367732.49514154455, 188472]),
-            ([30012.369571568208, 136101.86383347574, 12751.512534025518, 109377.53775453306, 140409.82671136397, 355895.2917991453, 387598.1942840074, 373512.4762440534, 23562])]
-
-ecoli = [ ([429326.5281541101, 20830.831426016266, 26769.516920138325,26992.17734452068]), 
-         ([111347.8469921274, 183315.5309570613, 145620.88152866834, 409437.6682564925, 134370.40829945993, 277304.7236815254]),
-            ([387877.2050713496, 312281.15418290574, 486196.3041085362, 286454.46008238854]),
-            ([337383.11888024263, 348827.4483178621, 148572.00581428283, 269781.17495603,  461549.52062919])]
-
-ent_co = [([45944.71951992576, 42819.65134236022, 14419.980738746319, 63980, 132762]), 
-          ([109925.465309905, 79612.13354098213, 46202.46510145668, 55182.472283692354, 179308.4799678017, 72140.62085399251, 59930.49838893081,  81622.88932344121, 125376]),
-          ([133616.5332796591, 23329.239782307275, 38164.97239072235, 3566.42683158818, 49841.93215699958, 33499.418502635635, 32309.77994890224,  23665.44896543966, 33135.575647364, 22937.923767081345, 115016.10230890731, 187618]),
-          ([55616.538048072034, 10079.947927941344, 34003.70827562903, 48037.69756361926, 57930.14145661801, 26650.75047392173, 18062.719116312706, 42176.42001744546, 14012])]
-
-ent = [([145719.7700434657, 132853.42173086293, 49593.08968900539, 42897.058102400624, 132762]), 
-       ([191166.61280572205, 96122.08029061732, 133520.86963127236, 172674.3443290808, 127962.97477912421, 105634.37227330725]),
-          ([190393.93985167015, 82472.47297014121, 103497.2411231636, 83590.30802445539]),
-          ([128992.59076753035, 92435.67970619304, 182715.3318089329, 89181.74673619,116083.68712655])]
-
-pa_co = [ ([564.8839733898792, 59753.966369545655, 76084.78222377267, 1218, 1887]),
-          ([304214.7366569871, 314624.12837939983, 256.68741611089274, 677.4296636374746, 216.95526415455606, 495.2815851177541, 8132.448033845329, 77540.33970772212, 298198.37500867364, 1114.08660477438,1083]),
-          ([510447.32744726987, 232140.6416575893, 97072.44822831418, 152974.1378831626, 544.3205115672279, 359884.46961609664, 207820.33371656644, 232250.19955164785, 109811.70338191417, 49315.8829610963, 353645]),
-          ([282075.78929444845, 326177.65918198874, 128033.73931436759, 398119.9328066944, 103348.1002644917, 1776.8635350431903, 26057.464556832147, 365102.55372229044, 196572])]
-
-pa = [([362289.6023790988, 550.316753017643, 118188.07173208568]), 
-      ([126345.30028869871, 80597.25082750342, 21905.3075725621, 485315.62176974496, 3045.379556830059, 2071.840862834238, 27850.31514594865, 8115.406266916172]),
-          ([337295.43424540985, 398535.4141324807, 242220.39670517063, 23597.645090594877, 164344.37751006486]),
-          ([385489.7102260408, 439545.5021568775, 227691.2968063428, 5.02094258e+05, 452658.56209157, 520242.070775, 429652.64031865])]
-
-for i in np.arange(0,len(pa)):
-    print(stats.mannwhitneyu(pa[i], pa_co[i]))
-print('end pa')
-
-for i in np.arange(0,len(pa)):
-    print(stats.mannwhitneyu(ecoli[i], ecoli_co[i]))
-print('end ec')
-    
-for i in np.arange(0,len(pa)):
-    print(stats.mannwhitneyu(ent[i], ent_co[i]))
-print('end ef')
-
 #%%
 """
 SI Figure S4A
@@ -1005,7 +929,6 @@ plt.title('Biofilm Culture')
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
-
 #%%
 """
 SI Figure S4B
@@ -1078,7 +1001,6 @@ plt.title('Biofilm Culture')
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
-
 #%%
 """
 SI Figure S8B
@@ -1100,8 +1022,6 @@ plt.title('PA14 Monoculture')
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
-
-
 #%%
 """
 SI Figure S9A
@@ -1123,7 +1043,6 @@ plt.xlabel('Species')
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
-
 #%%
 """
 SI Figure S9B
@@ -1148,7 +1067,6 @@ print(df['Pa_8d'].mean())
 print(df['Pa_5d'].mean())
 print(df['Ec_8d'].mean())
 print(df['Ef_8d'].mean())
-
 #%%
 """
 SI Figure S9C
@@ -1180,7 +1098,6 @@ plt.grid(False)
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
-
 #%%
 """
 SI Figure S10A
@@ -1209,8 +1126,6 @@ plt.ylabel('Individuals',fontsize=20)
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
-
-
 #%%
 """
 SI Figure S10B
@@ -1237,7 +1152,6 @@ plt.ylabel('Individuals',fontsize=20)
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
-
 #%%
 """
 SI Figure S10C
@@ -1264,7 +1178,6 @@ plt.ylabel('Individuals',fontsize=20)
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
-
 #%%
 """
 SI Figure S10D
@@ -1302,6 +1215,7 @@ Stochastic spatial model rep ternary plot
 
 Use the generate_ternary_plot code in the stochastic_spatial_model directory to generate data prior to running this section
 """
+
 figure, tax = ternary.figure(scale=1.0)
 figure.set_size_inches(5, 5)
 tax.boundary()
@@ -1311,28 +1225,23 @@ sax = tax.get_axes()
 #grab one of the runs with a 0.33,0.33,0.33 starting condition for this
 volume_dataframe2 = pd.read_excel('Stochastic_Spatial_Model/biased_dispersal_vector_plot_cont_1000.xlsx')
 norm = mpl.colors.Normalize(vmin=0, vmax=1000)
+
 for i in np.arange(0,1000):    
 
-    cmap= Inferno_20.mpl_colormap
-        
+    cmap= Inferno_20.mpl_colormap    
     color = cmap(norm(i))
+    
     pstart = ternary.project_point((volume_dataframe2['Species2'][i],volume_dataframe2['Species1'][i],volume_dataframe2['Species3'][i]))
-    
     pend = ternary.project_point((volume_dataframe2['Species2'][i+1],volume_dataframe2['Species1'][i+1],volume_dataframe2['Species3'][i+1]))
-    
     pstart_m = ternary.project_point((volume_dataframe2['Species2'][i],volume_dataframe2['Species1'][i],volume_dataframe2['Species3'][i]))
-    
     pend_m = ternary.project_point((volume_dataframe2['Species2'][i+1],volume_dataframe2['Species1'][i+1],volume_dataframe2['Species3'][i+1]))    
     
     mag = 1
-    
     stepsize = np.sqrt((pend[0]-pstart[0])**2+(pend[1]-pstart[1])**2)
-    
     dxy = (pend - pstart)*.95
-
     lw=1
-
     sax.arrow(*pstart, *dxy, linewidth=lw, color=color, head_width=0.02, alpha=.25)
+    
     if i == 0:
         sax.scatter(*pstart, marker=(5, 1), color='black')
 
@@ -1353,7 +1262,6 @@ norm = mpl.colors.Normalize(vmin=0, vmax=1000)
 #             orientation='portrait', format='svg',
 #             transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
-
 #%%
 """
 SI Figure S11B
@@ -1371,10 +1279,8 @@ increment = 0.1
 
 # Calculate the number of steps
 num_steps = int((stop - start) / increment) + 1
-
 # Generate all combinations
 combinations = list(product(range(num_steps), repeat=3))
-
 # Convert combinations to actual values
 result = [[start + c[0] * increment, start + c[1] * increment, start + c[2] * increment] for c in combinations]
 
@@ -1406,10 +1312,8 @@ for i in np.arange(0,len(result_final)):
         end_to_average_3 = []
         step = increment
         
-        for file in file_list:
-            
+        for file in file_list:    
             volume_dataframe= pd.read_excel(file)
-            
             quadrant = volume_dataframe.drop(volume_dataframe[(volume_dataframe['Species1'] <= result_final[i][0]-step) |
                                                (volume_dataframe['Species1'] > result_final[i][0]) |
                                                (volume_dataframe['Species3'] <= result_final[i][1]-step) |
@@ -1446,9 +1350,7 @@ for i in np.arange(0,len(result_final)):
         step = increment
         
         for file in file_list:
-            
             volume_dataframe= pd.read_excel(file)        
-            
             quadrant = volume_dataframe.drop(volume_dataframe[(volume_dataframe['Species1'] <= result_final[i][0]-step) |
                                                (volume_dataframe['Species1'] > result_final[i][0]) |
                                                (volume_dataframe['Species3'] <= result_final[i][1]-step) |
@@ -1482,41 +1384,29 @@ tax.gridlines(multiple=0.2, color="black")
 
 for i in np.arange(0,len(volume_dataframe_average)):
     if 1 not in [volume_dataframe_average['Species1'][i][0],volume_dataframe_average['Species2'][i][0],volume_dataframe_average['Species3'][i][0]]:    
-        pstart = ternary.project_point((volume_dataframe_average['Species1'][i][0],volume_dataframe_average['Species2'][i][0],volume_dataframe_average['Species3'][i][0]))
-        pend = ternary.project_point((volume_dataframe_average['Species1'][i][1],volume_dataframe_average['Species2'][i][1],volume_dataframe_average['Species3'][i][1]))
-        pstart_m = ternary.project_point((volume_dataframe_average['Species1'][i][0],volume_dataframe_average['Species2'][i][0],volume_dataframe_average['Species3'][i][0]))
-        pend_m = ternary.project_point((volume_dataframe_average['Species1'][i][1],volume_dataframe_average['Species2'][i][1],volume_dataframe_average['Species3'][i][1]))    
+        
+        pstart = ternary.project_point((volume_dataframe_average['Species2'][i][0],volume_dataframe_average['Species1'][i][0],volume_dataframe_average['Species3'][i][0]))
+        pend = ternary.project_point((volume_dataframe_average['Species2'][i][1],volume_dataframe_average['Species1'][i][1],volume_dataframe_average['Species3'][i][1]))
+        pstart_m = ternary.project_point((volume_dataframe_average['Species2'][i][0],volume_dataframe_average['Species1'][i][0],volume_dataframe_average['Species3'][i][0]))
+        pend_m = ternary.project_point((volume_dataframe_average['Species2'][i][1],volume_dataframe_average['Species1'][i][1],volume_dataframe_average['Species3'][i][1]))    
 
         mag = 1
-        
-
         dxy = (pend - pstart)*.25
-    
         lw=1
-    
         sax.arrow(*pstart, *dxy, linewidth=lw, color='black', head_width=0.025, alpha=.5)
         
 for i in np.arange(0,len(volume_dataframe_average_disp)):
     if 1 not in [volume_dataframe_average_disp['Species1'][i][0],volume_dataframe_average_disp['Species2'][i][0],volume_dataframe_average_disp['Species3'][i][0]]:    
-        # to_plot[0] = [literal_eval(x) for x in to_plot[0]]
-        # print(to_plot[0])
-        pstart = ternary.project_point((volume_dataframe_average_disp['Species1'][i][0],volume_dataframe_average_disp['Species2'][i][0],volume_dataframe_average_disp['Species3'][i][0]))
-        
-        pend = ternary.project_point((volume_dataframe_average_disp['Species1'][i][1],volume_dataframe_average_disp['Species2'][i][1],volume_dataframe_average_disp['Species3'][i][1]))
-        
-        pstart_m = ternary.project_point((volume_dataframe_average_disp['Species1'][i][0],volume_dataframe_average_disp['Species2'][i][0],volume_dataframe_average_disp['Species3'][i][0]))
-        
-        pend_m = ternary.project_point((volume_dataframe_average_disp['Species1'][i][1],volume_dataframe_average_disp['Species2'][i][1],volume_dataframe_average_disp['Species3'][i][1]))    
-        
-        mag = 1
-        
-        stepsize = np.sqrt((pend[0]-pstart[0])**2+(pend[1]-pstart[1])**2)
-        
 
+        pstart = ternary.project_point((volume_dataframe_average_disp['Species2'][i][0],volume_dataframe_average_disp['Species1'][i][0],volume_dataframe_average_disp['Species3'][i][0]))
+        pend = ternary.project_point((volume_dataframe_average_disp['Species2'][i][1],volume_dataframe_average_disp['Species1'][i][1],volume_dataframe_average_disp['Species3'][i][1]))
+        pstart_m = ternary.project_point((volume_dataframe_average_disp['Species2'][i][0],volume_dataframe_average_disp['Species1'][i][0],volume_dataframe_average_disp['Species3'][i][0]))
+        pend_m = ternary.project_point((volume_dataframe_average_disp['Species2'][i][1],volume_dataframe_average_disp['Species1'][i][1],volume_dataframe_average_disp['Species3'][i][1]))    
+        
+        mag = 1       
+        stepsize = np.sqrt((pend[0]-pstart[0])**2+(pend[1]-pstart[1])**2)
         dxy = (pend - pstart)
-    
         lw=1
-    
         sax.arrow(*pstart, *dxy, linewidth=lw, color='red', head_width=0.025, alpha=.5)
 
 tax.get_axes().axis('off')
@@ -1555,7 +1445,6 @@ plt.ylabel('Individuals',fontsize=20)
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
-
 #%%
 """
 SI Figure S12B
@@ -1680,7 +1569,6 @@ plt.legend()
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
-
 #%%
 """
 SI Figure S15C
@@ -1704,7 +1592,6 @@ plt.legend()
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
-
 #%%
 """
 SI Figure S16B 
@@ -1733,7 +1620,6 @@ plt.show()
 print(stats.mannwhitneyu(plot_dict_post['Ecoli'], plot_dict_post['Ent']))
 print(stats.mannwhitneyu(plot_dict_post['PA14'], plot_dict_post['Ent']))
 print(stats.mannwhitneyu(plot_dict_post['PA14'], plot_dict_post['Ecoli']))
-
 #%%
 """
 SI Figure S16C
@@ -1765,7 +1651,6 @@ print(stats.mannwhitneyu(plot_dict_post['Ec_Ef'], plot_dict_post['Pa_Ec']))
 """
 SI Figure S17 and S18 are .tiff files exported form ZEN Blue
 """
-
 #%%
 """
 SI Figure S19A
@@ -1780,7 +1665,6 @@ plt.hist(df['WT'].dropna(), bins=50, color='black', alpha=0.5)
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
-
 #%%
 """
 SI Figure S19B
@@ -1805,7 +1689,6 @@ plt.title('Tri-Culture')
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
-
 #%%
 """
 SI Figure S19C
@@ -1829,7 +1712,6 @@ plt.legend()
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
-
 #%%
 """
 SI Figure S20A
@@ -1853,7 +1735,6 @@ plt.ylabel(r'Biovolume', fontsize=18)
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
-
 #%%
 """
 SI Figure S20B
@@ -1876,7 +1757,6 @@ plt.ylabel(r'Biovolume', fontsize=18)
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
-
 #%%
 """
 SI Figure S20C_1
@@ -1923,7 +1803,6 @@ plt.xlim(85, 117)
 #         orientation='portrait', format='svg',
 #         transparent=False, bbox_inches='tight', pad_inches=.05, metadata=None)
 plt.show()
-
 #%%
 """
 SI Figure S20C_3
